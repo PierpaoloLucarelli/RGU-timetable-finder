@@ -1,0 +1,49 @@
+/*containers*/
+
+
+.container-main{
+	width: 100%;
+	margin: 0 auto;
+	text-align: center;
+	background: url("../img/main-background.jpg");
+	height: 100%;
+}
+
+.top-container{
+	position: relative;
+	height: 550px;
+}
+
+.bottom-container{
+	opacity: 0;
+}
+
+.search-container{
+	padding: 30px;
+	background: rgba(0,0,0,0.5);
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+}
+
+/*nav */
+
+nav img {
+	width: 50px;
+}
+
+nav {
+	text-align: left;
+	padding: 20px;
+}
+
+
+
+#title{
+	margin-top: 200px;
+}
+
+
+
+
+
