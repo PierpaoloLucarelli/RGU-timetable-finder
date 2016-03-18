@@ -2,6 +2,7 @@
 
 
 .container-main{
+	position: relative;
 	width: 100%;
 	margin: 0 auto;
 	text-align: center;
@@ -15,6 +16,7 @@
 }
 
 .bottom-container{
+	background: #ecf0f1;
 	opacity: 0;
 }
 
@@ -35,7 +37,7 @@
 	margin: 0 auto;
 	position: absolute;
 	left: 50%;
-	margin-left: -201px;
+	margin-left: -308px;
 }
 
 .search input, .search button{
@@ -44,6 +46,18 @@
 	border-radius: 0;
 	background: #fff;
 	border: none;
+	height: 45px;
+}
+
+.search input{
+	width: 400px;
+}
+
+#datepicker{
+	width: 100px;
+	padding: 0;
+	font-weight: bold;
+	font-size: 0.8em;
 }
 
 #module-text{
@@ -53,11 +67,19 @@
 	border-top-left-radius: 4px;
 }
 
+#module-text:focus{
+	border:1px solid #873a71;
+}
+
 #search-btn {
 	background: #873a71;
 	color: #fff;
 	border-bottom-right-radius: 4px; 
 	border-top-right-radius: 4px;
+}
+
+#search-btn:hover {
+	background: #88266c;
 }
 
 /*nav */
@@ -79,7 +101,38 @@ nav {
 }
 
 
+/*class boxes */
 
+.module-info{
+	margin-top: 100px;
+	padding: 10px;
+	background: #fff;
+	text-align: left;
+	margin-bottom: 50px;
+}
+
+.module-info-code{
+	font-size: 1em;
+	font-weight: bold;
+	text-transform: uppercase;
+	margin: 0;
+}
+
+.module-info-title{
+	font-size: 1em;
+}
+
+.module-info-time{
+	font-weight: bold;
+}
+
+.module-img{
+	width: 100%;
+}
+
+#datepicker{
+	z-index: 1;
+}
 
 
 
