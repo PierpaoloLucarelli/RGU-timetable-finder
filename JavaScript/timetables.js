@@ -17,7 +17,7 @@ var timetables = {
 			module: "CM2027", description: "Software Architecture and Software Engineering", type: "Lecture"
 		},
 		{
-			room: "H999", startTime: "10:00", endTime: "11:00", 
+			room: "H423", startTime: "10:00", endTime: "11:00", 
 			module: "CM2027", description: "Software Architecture and Software Engineering", type: "Tutorial"
 		},
 		{
@@ -25,7 +25,7 @@ var timetables = {
 			module: "CM2027", description: "Software Architecture and Software Engineering", type: "Lab"	
 		}],
 		thursday: [{
-			room: "N999", startTime: "15:00", endTime: "17:00", 
+			room: "N527", startTime: "15:00", endTime: "17:00", 
 			module: "CM2521", description: "Introduction to Data Networks", type: "Lecture"
 		}],
 		friday: [{

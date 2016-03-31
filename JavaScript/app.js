@@ -28,14 +28,28 @@ $(document).ready(function(){
 			selectedDayInBox = $(this).val();
 		});
 
+		//change color/style of div when mouse is over class/module
+		$(".row").on("mouseover", ".module-info", function(){
+  			//use addClass to change div color/cursor when hovered over
+  			$(this).css("cursor", "pointer"); 
+  		});
+
+		$(".row").on("click", ".module-info", function(){
+			var floorPlanPicture = "N5.jpg";
+			// var floorPlanPicture = $(this).text().substring(15,17)+".jpg";
+			var floorPlanPictureLocation = "img/floorPlans/" + floorPlanPicture;
+			// var floorPlanPictureHTML = "<a class = 'image' href ='img/floorPlans/" + floorPlanPicture+"'</a>";
+			$.colorbox({href:floorPlanPictureLocation});
+  		});
+
 		$("#search-btn").click(function(){
 			// show the bottom container
 			$(".bottom-container").css("display", "block");
 			$(".bottom-container").css("height", "600px");
 
 			$('html, body').animate({
-				scrollTop: 200
-			}, 800);
+				scrollTop: 400
+			},800);
 
 			// -------------------------------------------
 			// make the call to google calnedar here
@@ -51,22 +65,27 @@ $(document).ready(function(){
 			*/
 			var weekDays = ["sunday","monday","tuesday","wednesday","thursday","friday","saturday"];
 			var selectedDate = $("#datepicker").datepicker("getDate");
-			var selectedDayOfWeek = weekDays[selectedDate.getUTCDay()];
-			var searchedCourse = $("#module-text").val();
+			var selectedDayOfWeek = weekDays[selectedDate.getDay()];
+			var searchedCourse = "cs";
+			// var searchedCourse = $("#module-text").val();
 			$(".row").empty();
-			for (var i = 0; i < timetables[searchedCourse][selectedDayOfWeek].length; i++) {
-				var moduleToDisplay = timetables[searchedCourse][selectedDayOfWeek][i];
-				var buildingPicture = moduleToDisplay.room.substring(0,1)+".jpg";
-				$(".row").append('<div class = "three columns">\
-					<div class = "module-info">\
-					<h3 class = "module-info-code">'+moduleToDisplay.module+' - '+moduleToDisplay.room+' - '+moduleToDisplay.type+'</h3>\
-					<h5 class = "module-info-title">'+moduleToDisplay.description+'</h5>\
-					<p class = "module-info-time">'+moduleToDisplay.startTime+' - '+moduleToDisplay.endTime+'</p>\
-					<img class = "module-img" src="img/'+buildingPicture+'">\
-					</div>\
-					<div class = "module-img">\
-					</div>\
-					</div>');
+			if (selectedDayOfWeek == "saturday" || selectedDayOfWeek == "sunday") {
+				$(".row").append("No classes during weekend.");
+			} else {
+				for (var i = 0; i < timetables[searchedCourse][selectedDayOfWeek].length; i++) {
+					var moduleToDisplay = timetables[searchedCourse][selectedDayOfWeek][i];
+					var buildingPicture = moduleToDisplay.room.substring(0,1)+".jpg";				
+					$(".row").append('<div class = "three columns">\
+						<div class = "module-info">\
+						<h3 class = "module-info-code">'+moduleToDisplay.module+' - '+moduleToDisplay.room+' - '+moduleToDisplay.type+'</h3>\
+						<h5 class = "module-info-title">'+moduleToDisplay.description+'</h5>\
+						<p class = "module-info-time">'+moduleToDisplay.startTime+' - '+moduleToDisplay.endTime+'</p>\
+						<img class = "module-img" src="img/buildings/'+buildingPicture+'">\
+						</div>\
+						<div class = "module-img">\
+						</div>\
+						</div>');
+				}
 			}
 			getClasses();
 		});
