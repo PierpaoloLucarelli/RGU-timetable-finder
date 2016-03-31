@@ -118,6 +118,14 @@ nav {
 	opacity: 0;
 	transform: translateX(-100px);
 	transition: all 0.3s ease-in-out;
+	border: 1px white;
+	border-style: solid;
+}
+
+.module-info:hover{
+	border: 1px rebeccapurple;
+	border-style: solid;
+	border-radius: 0.5%;
 }
 
 .module-info.animate{
