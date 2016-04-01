@@ -120,8 +120,11 @@ nav {
 
 /*information about the modules*/
 .module-info{
+    float: left;
+    width: 190px;
+    height: inherit;
 	margin-top: 40px;
-	padding: 10px;
+    padding: 10px;
 	background: #fff;
 	text-align: left;
 	margin-bottom: 50px;
@@ -131,6 +134,7 @@ nav {
 	border: 1px white;
 	border-style: solid;
 	pointer-events: all;
+    visibility: visible;
 }
 
 .module-info:hover{
@@ -163,8 +167,27 @@ nav {
 }
 
 .module-info.animate{
-	opacity: 1;
-	transform: translateX(0px);
+    visibility: visible;
+    opacity: 1;
+    transform: translateX(0px);
+}
+
+#temp-0{
+    position: relative;
+    left: 8%;
+    z-index: 2;
+}
+
+#temp-1{
+    left: 38%;
+    position: relative;
+    z-index: 1;
+}
+
+#temp-2{
+    position: relative;
+    left: 68%;
+    z-index: 1;
 }
 
 #datepicker{
