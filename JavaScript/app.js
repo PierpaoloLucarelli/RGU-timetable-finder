@@ -1,5 +1,6 @@
 $(document).ready(function(){
 	var selectedDayInBox;
+    var cols = [];
 
 	var getClasses = function(){
 		$("#heading-classes").text("Your classes for " + (selectedDayInBox === "Today" ? selectedDayInBox : "the " + selectedDayInBox));
@@ -35,19 +36,37 @@ $(document).ready(function(){
   		});
 
 		$(".row").on("click", ".module-info", function(event){
-			var s = [];
-			s = $('.module-info').each( function () {}).toArray();
-
-			s.forEach(function(element){
-				if ( element.getAttribute("id") != event.target.id ){
+			var modules = [];
+			modules = $('.module-info').each( function () {}).toArray();
+			modules.forEach(function(element){
+				if ( element.getAttribute("id") != event.target.id ) {
+                    setTimeout(function(){
+                        $(element).css("visibility", "hidden");
+                    }, 900);
 					$(element).removeClass("animate");
 					$(element).removeAttr("id");
-					setTimeout(function(){
-						$(element).hide();
-					}, 500);
-					
 				}
-			});
+			})
+
+            if ( event.target.id == "temp-2"){
+                setTimeout(function(){
+                    ($(event.currentTarget).css("z-index", "1"));
+                    ($(event.currentTarget).css("transform", "translateX(-270%)"));
+                    ($(event.currentTarget).css("transition", "all 0.3s ease-in-out"));
+                }, 500);
+            } else if ( event.target.id == "temp-1"){
+                setTimeout(function(){
+                    ($(event.currentTarget).css("z-index", "1"));
+                    ($(event.currentTarget).css("transform", "translateX(-140%)"));
+                    ($(event.currentTarget).css("transition", "all 0.3s ease-in-out"));
+                }, 500);
+            } else {
+                setTimeout(function() {
+                    ($(event.currentTarget).css("z-index", "1"));
+                }, 500);
+            }
+
+
   		});
 
 		$("#search-btn").click(function(){
@@ -93,6 +112,13 @@ $(document).ready(function(){
 						</div>');
 				}
 			}
+
+            cols = $('.three, .columns').each( function () {}).toArray();
+            cols.forEach( function(element, i){
+                $(element).attr("id", "cols-temp-"+i);
+            })
+
+
 			getClasses();
 		});
 	});
