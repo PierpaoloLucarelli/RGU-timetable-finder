@@ -2,6 +2,7 @@
 
 
 .container-main{
+    z-index: 0;
 	position: relative;
 	width: 100%;
 	margin: 0 auto;
@@ -120,8 +121,11 @@ nav {
 
 /*information about the modules*/
 .module-info{
+    float: left;
+    width: 190px;
+    height: inherit;
 	margin-top: 40px;
-	padding: 10px;
+    padding: 10px;
 	background: #fff;
 	text-align: left;
 	margin-bottom: 50px;
@@ -130,6 +134,28 @@ nav {
 	transition: all 0.3s ease-in-out;
 	border: 1px white;
 	border-style: solid;
+	pointer-events: all;
+    visibility: visible;
+}
+
+#canvas{
+    visibility: hidden;
+    opacity: 0;
+    transform: translateX(-100px); /*animation*/
+    transition: all 0.3s ease-in-out;
+    z-index: 3;
+    left:45%;
+    margin-top: 10%;
+    position:absolute;
+    display: block;
+    pointer-events:none;
+}
+
+#canvas.animate {
+    visibility: visible;
+    opacity: 1;
+    transition: all 0.3s ease-in-out;
+    transform: translateX(0px);
 }
 
 .module-info:hover{
@@ -138,41 +164,103 @@ nav {
 	border-radius: 0.5%;
 }
 
-.module-info.animate{
-	opacity: 1;
-	transform: translateX(0px);
-}
-
-/*module code */
-.module-info-code{
+.module-info > h3 {
 	font-size: 1em;
 	font-weight: bold;
 	text-transform: uppercase;
 	margin: 0;
+	pointer-events:none;
 }
 
-.module-info-title{
+.module-info > h5{
 	font-size: 1em;
+	pointer-events:none;
 }
 
-/*class time*/
-.module-info-time{
+.module-info > p{
 	font-weight: bold;
+	pointer-events:none;
 }
 
-.module-img{
+.module-info > img {
 	width: 100%;
+	pointer-events: none;
+}
+
+.module-info.animate{
+    visibility: visible;
+    opacity: 1;
+    transition: all 0.3s ease-in-out;
+    transform: translateX(0px);
+}
+
+#temp-0{
+    position: relative;
+    left: 8%;
+    z-index: 2;
+}
+
+#temp-1{
+    left: 38%;
+    position: relative;
+    z-index: 1;
+}
+
+#temp-2{
+    position: relative;
+    left: 68%;
+    z-index: 1;
 }
 
 #datepicker{
 	z-index: 1;
 }
 
+.floormap{
+    z-index: 0;
+    left: 55%;
+    display:block;
+    visibility:visible;
+    position:relative;
+}
+
+/*.footer {*/
+
+
+footer{
+	padding: 10px;
+	opacity: 0.9;
+	background: #000;
+	color: #fff;
+	text-align: center;
+}
+
+footer h4 {
+	font-size: 1em;
+}
+
+footer h5 {
+	font-size: 0.8em;
+	display: inline-block;
+	margin: 0 20px;
+	opacity: 0.6;
+}
+
+footer img {
+	display: block;
+	width: 500px;
+	margin: 0 auto;
+	opacity: 0.8;
+}
+
+/*}*/
+
+
 /*RESPONSIVE SECTION*/
 
 @media screen and (max-width: 650px) {
 	#module-text{
-		width: 45%;
+		width: 180px;
 	}
 
 	.search {
@@ -202,5 +290,5 @@ nav {
 		font-size: 3em;
 	}
 
-	
+
 }
