@@ -177,11 +177,6 @@ nav {
 
 	.search {
 		margin-left: -170px;
-		width: 200px;
-	}
-
-	.search {
-		margin-left: -208px;
 	}
 
 	.search-container{
@@ -189,7 +184,7 @@ nav {
 		padding-top: 30px;
 		height: 80px;
 	}
-	
+
 	#datepicker{
 		width: 80px;
 	}
@@ -197,13 +192,15 @@ nav {
 	#title{
 		font-size: 3em;
 	}
+
 	#search-btn{
 		width: 80px;
 		padding: 0;
 	}
-	
+
 	#title{
 		font-size: 3em;
 	}
+
 	
 }
