@@ -1,6 +1,5 @@
-$(document).ready(function(){
-	var selectedDayInBox;
-
+//executes when the data to be displayed is ready
+$(document).ready(function(){	
 	var getClasses = function(){
 		$("#heading-classes").text("Your classes for " + (selectedDayInBox === "Today" ? selectedDayInBox : "the " + selectedDayInBox));
 
@@ -13,34 +12,33 @@ $(document).ready(function(){
 			});
 		}
 
+		//adding the datepicker
 		$("#datepicker").datepicker({
 			inline: true,
 			showOtherMonths: true,
 			dayNamesMin: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
 		});
-		selectedDayInBox = $("#datepicker").val();
+		var selectedDayInBox = $("#datepicker").val();
 
 		// stores the selected date;
 		$("#datepicker").on("change",function(){
-			$(".module-info").each(function(){
-				$(this).removeClass("animate");
-			});
 			selectedDayInBox = $(this).val();
 		});
 
-		//change color/style of div when mouse is over class/module
+		//changes border/cursor mouse is over class/module
 		$(".row").on("mouseover", ".module-info", function(){
-  			//use addClass to change div color/cursor when hovered over
-  			$(this).css("cursor", "pointer"); 
-  		});
+			$(this).css("cursor", "pointer"); 
+		});
 
 		$(".row").on("click", ".module-info", function(){
+			//using floor 5 of Riverside East as test. Will be made to work with objects in the future and not substring.
 			var floorPlanPicture = "N5.jpg";
 			// var floorPlanPicture = $(this).text().substring(15,17)+".jpg";
 			var floorPlanPictureLocation = "img/floorPlans/" + floorPlanPicture;
 			// var floorPlanPictureHTML = "<a class = 'image' href ='img/floorPlans/" + floorPlanPicture+"'</a>";
+			//the Colorbox plugin is used when clicking on a module. It will display the floor map in a fancy window.
 			$.colorbox({href:floorPlanPictureLocation});
-  		});
+		});
 
 		$("#search-btn").click(function(){
 			// show the bottom container
@@ -60,18 +58,23 @@ $(document).ready(function(){
 			// display th edate on screen
 
 			/*
-			Search function currently working only with "cs" in search box and works with hard-coded sample data
+			Search function currently working only show data for Computer Science and works with hard-coded sample data
 			in timetables.js for testing purposes. After testing is approved we will proceed with Google API.
 			*/
 			var weekDays = ["sunday","monday","tuesday","wednesday","thursday","friday","saturday"];
 			var selectedDate = $("#datepicker").datepicker("getDate");
+
+			//getDay() returns 0 to 6 and thus we get sunday - saturday
 			var selectedDayOfWeek = weekDays[selectedDate.getDay()];
 			var searchedCourse = "cs";
+
 			// var searchedCourse = $("#module-text").val();
 			$(".row").empty();
-			if (selectedDayOfWeek == "saturday" || selectedDayOfWeek == "sunday") {
-				$(".row").append("No classes during weekend.");
+			if (typeof timetables[searchedCourse][selectedDayOfWeek] == "undefined") {
+				$(".row").append("No classes during selected date.");
 			} else {
+
+				//scans the cs object in timetables.js and pulls the information and creates a div object with it
 				for (var i = 0; i < timetables[searchedCourse][selectedDayOfWeek].length; i++) {
 					var moduleToDisplay = timetables[searchedCourse][selectedDayOfWeek][i];
 					var buildingPicture = moduleToDisplay.room.substring(0,1)+".jpg";				
