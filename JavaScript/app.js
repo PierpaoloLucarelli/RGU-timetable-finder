@@ -27,6 +27,8 @@ $(document).ready(function(){
 				$(this).removeClass("animate");
 			});
             $(document.getElementById("canvas")).removeClass("animate");
+            $(document.getElementById("canvas")).css("visibility", "hidden");
+            $(document.getElementById("canvas")).css("display", "none");
 			selectedDayInBox = $(this).val();
 		});
 
