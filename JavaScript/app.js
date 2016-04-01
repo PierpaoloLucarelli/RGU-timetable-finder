@@ -8,7 +8,7 @@ $(document).ready(function(){
 			$(".module-info").each(function(i){
 
 				setTimeout(function(){
-					$(".module-info").eq(i).addClass("animate");
+					$(".module-info").eq(i).addClass("animate").attr("id", "temp-"+i);
 				}, 150 * (i+1));
 			});
 		}
@@ -34,12 +34,20 @@ $(document).ready(function(){
   			$(this).css("cursor", "pointer"); 
   		});
 
-		$(".row").on("click", ".module-info", function(){
-			var floorPlanPicture = "N5.jpg";
-			// var floorPlanPicture = $(this).text().substring(15,17)+".jpg";
-			var floorPlanPictureLocation = "img/floorPlans/" + floorPlanPicture;
-			// var floorPlanPictureHTML = "<a class = 'image' href ='img/floorPlans/" + floorPlanPicture+"'</a>";
-			$.colorbox({href:floorPlanPictureLocation});
+		$(".row").on("click", ".module-info", function(event){
+			var s = [];
+			s = $('.module-info').each( function () {}).toArray();
+
+			s.forEach(function(element){
+				if ( element.getAttribute("id") != event.target.id ){
+					$(element).removeClass("animate");
+					$(element).removeAttr("id");
+					setTimeout(function(){
+						$(element).hide();
+					}, 500);
+					
+				}
+			});
   		});
 
 		$("#search-btn").click(function(){
@@ -77,12 +85,10 @@ $(document).ready(function(){
 					var buildingPicture = moduleToDisplay.room.substring(0,1)+".jpg";				
 					$(".row").append('<div class = "three columns">\
 						<div class = "module-info">\
-						<h3 class = "module-info-code">'+moduleToDisplay.module+' - '+moduleToDisplay.room+' - '+moduleToDisplay.type+'</h3>\
-						<h5 class = "module-info-title">'+moduleToDisplay.description+'</h5>\
-						<p class = "module-info-time">'+moduleToDisplay.startTime+' - '+moduleToDisplay.endTime+'</p>\
-						<img class = "module-img" src="img/buildings/'+buildingPicture+'">\
-						</div>\
-						<div class = "module-img">\
+						<h3>'+moduleToDisplay.module+' - '+moduleToDisplay.room+' - '+moduleToDisplay.type+'</h3>\
+						<h5>'+moduleToDisplay.description+'</h5>\
+						<p>'+moduleToDisplay.startTime+' - '+moduleToDisplay.endTime+'</p>\
+						<img src="img/buildings/'+buildingPicture+'">\
 						</div>\
 						</div>');
 				}
