@@ -172,11 +172,19 @@ nav {
 
 @media screen and (max-width: 650px) {
 	#module-text{
+<<<<<<< HEAD
 		width: 180px;
 	}
 
 	.search {
 		margin-left: -170px;
+=======
+		width: 200px;
+	}
+
+	.search {
+		margin-left: -208px;
+>>>>>>> origin/master
 	}
 
 	.search-container{
@@ -185,6 +193,7 @@ nav {
 		height: 80px;
 	}
 
+<<<<<<< HEAD
 	#datepicker{
 		width: 80px;
 	}
@@ -196,5 +205,10 @@ nav {
 		width: 80px;
 		padding: 0;
 	}
+=======
+	#title{
+		font-size: 3em;
+	}
+>>>>>>> origin/master
 	
 }
