@@ -167,10 +167,6 @@ nav {
 	transform: translateX(0px);
 }
 
-.module-img{
-	width: 100%;
-}
-
 #datepicker{
 	z-index: 1;
 }
