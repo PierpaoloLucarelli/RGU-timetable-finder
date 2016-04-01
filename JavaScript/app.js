@@ -80,7 +80,6 @@ $(document).ready(function(){
 			// show the bottom container
 			$(".bottom-container").css("display", "block");
 			$(".bottom-container").css("height", "600px");
-			$("footer").css("margin-top", "260px");
 
 			$('html, body').animate({
 				scrollTop: 400
