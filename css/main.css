@@ -130,6 +130,7 @@ nav {
 	transition: all 0.3s ease-in-out;
 	border: 1px white;
 	border-style: solid;
+	pointer-events: all;
 }
 
 .module-info:hover{
@@ -138,26 +139,32 @@ nav {
 	border-radius: 0.5%;
 }
 
-.module-info.animate{
-	opacity: 1;
-	transform: translateX(0px);
-}
-
-/*module code */
-.module-info-code{
+.module-info > h3 {
 	font-size: 1em;
 	font-weight: bold;
 	text-transform: uppercase;
 	margin: 0;
+	pointer-events:none;
 }
 
-.module-info-title{
+.module-info > h5{
 	font-size: 1em;
+	pointer-events:none;
 }
 
-/*class time*/
-.module-info-time{
+.module-info > p{
 	font-weight: bold;
+	pointer-events:none;
+}
+
+.module-info > img {
+	width: 100%;
+	pointer-events: none;
+}
+
+.module-info.animate{
+	opacity: 1;
+	transform: translateX(0px);
 }
 
 .module-img{
