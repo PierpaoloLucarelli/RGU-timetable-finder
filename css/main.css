@@ -2,6 +2,7 @@
 
 
 .container-main{
+    z-index: 0;
 	position: relative;
 	width: 100%;
 	margin: 0 auto;
@@ -222,6 +223,11 @@ nav {
     visibility:visible;
     position:relative;
 }
+
+/*.footer {*/
+
+/*}*/
+
 
 /*RESPONSIVE SECTION*/
 
