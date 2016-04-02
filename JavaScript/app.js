@@ -35,7 +35,7 @@ $(document).ready(function(){
 		//change color/style of div when mouse is over class/module
 		$(".row").on("mouseover", ".module-info", function(){
   			//use addClass to change div color/cursor when hovered over
-  			$(this).css("cursor", "pointer"); 
+  			$(this).css("cursor", "pointer");
   		});
 
 		$(".row").on("click", ".module-info", function(event){
@@ -108,7 +108,7 @@ $(document).ready(function(){
 			} else {
 				for (var i = 0; i < timetables[searchedCourse][selectedDayOfWeek].length; i++) {
 					var moduleToDisplay = timetables[searchedCourse][selectedDayOfWeek][i];
-					var buildingPicture = moduleToDisplay.room.substring(0,1)+".jpg";				
+					var buildingPicture = moduleToDisplay.room.substring(0,1)+".jpg";
 					$(".row").append('<div class = "three columns">\
 						<div class = "module-info">\
 						<h3>'+moduleToDisplay.module+' - '+moduleToDisplay.room+' - '+moduleToDisplay.type+'</h3>\

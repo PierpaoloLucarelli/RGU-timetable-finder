@@ -1,3 +1,5 @@
+// Contains the data for the modules (only cs at the moment)
+
 var timetables = {
 	cs: {
 		monday: [{
