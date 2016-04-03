@@ -1,263 +1,217 @@
 /*containers*/
 
-
-.container-main{
-    z-index: 0;
-	position: relative;
-	width: 100%;
-	margin: 0 auto;
-	text-align: center;
-	background: url("../img/main-background.jpg");
-	background-attachment: fixed;
-	height: 100%;
+.container-main {
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
+    background: url("../img/main-background.jpg");
 }
-
 /*container for the top section*/
-.top-container{
+
+.top-container {
 	position: relative;
-	height: 500px;
+    height: 100vh;
 }
-
-
 /*container for the bottom section*/
-.bottom-container{
-	background: #ecf0f1;
-	display: none;
-}
 
+.bottom-container {
+    background: #ecf0f1;
+    display: none;
+}
 /*search box*/
 
-.search-container{
-	padding: 30px;
-	background: rgba(0,0,0,0.5);
+.search-container {
 	position: absolute;
-	bottom: 0;
-	left: 0;
-	right: 0;
-	height: 45px;
-	text-align: center;
+    width: 100%;
+    padding: 15px 0px 15px 0px;
+    background: rgba(0, 0, 0, 0.5);
+    margin-top: 200px;
+    z-index: 1;
 }
-
 /*search bar*/
+
 .search {
-	margin: 0 auto;
-	position: absolute;
-	left: 50%;
-	margin-left: -308px;
+    width: 70%;
+    margin: 0 auto;
 }
-
-
-/*elements of search bar*/
-.search input, .search button{
-	margin: 0;
-	float: left;
-	border-radius: 0;
-	background: #fff;
-	border: none;
-	height: 45px;
-}
-
-.search input{
-	width: 400px;
-}
-
-/*JQuery datepicker*/
-#datepicker{
-	width: 100px;
-	padding: 0;
-	font-weight: bold;
-	font-size: 0.8em;
-}
-
-#module-text{
-	color: #656;
-	border-right: 1px solid #ccc;
-	border-bottom-left-radius: 4px;
-	border-top-left-radius: 4px;
-}
-
-#module-text:focus{
-	border:1px solid #873a71;
-}
-
+#module-text,
+#datepicker,
 #search-btn {
-	background: #873a71;
-	color: #fff;
-	border-bottom-right-radius: 4px;
-	border-top-right-radius: 4px;
+    float: left;
+    border: none;
+    border-radius: 0;
 }
 
+/* overrides some of the settigns from the skeleton framework */
+input, textarea, select, fieldset, button, .button {
+    margin-bottom: 0;
+ }
+
+#module-text {
+    width: 60%;
+}
+/*JQuery datepicker*/
+
+#datepicker {
+    width: 20%;
+    padding: 0;
+    background: #fff;
+    font-weight: bold;
+    font-size: 0.8em;
+}
+#search-btn {
+    padding: 0;
+    width: 20%;
+}
+#module-text {
+    color: #656;
+    border-right: 1px solid #ccc;
+    border-bottom-left-radius: 4px;
+    border-top-left-radius: 4px;
+}
+#module-text:focus {
+    border: 1px solid #873a71;
+}
+#search-btn {
+    background: #873a71;
+    color: #fff;
+    border-bottom-right-radius: 4px;
+    border-top-right-radius: 4px;
+}
 #search-btn:hover {
-	background: #88266c;
+    background: #88266c;
 }
 
+.footer {
+	display: none;
+}
 /*nav */
-
 /*logo*/
+
 nav img {
-	width: 50px;
+    float: left;
+    width: 50px;
+    padding: 10px;
 }
-
 nav {
-	position: fixed;
-	text-align: left;
-	padding: 20px;
+    width: 100%;
+    background: black;
+    position: fixed;
+    z-index: 2;
 }
-
 /*main header*/
-#title{
-	color: #fff;
-	font-weight: bold;
-	font-size: 4em;
-	padding-top: 140px;
+
+#title {
+    color: #fff;
+    font-weight: bold;
+    font-size: 4em;
+    padding-top: 150px;
 }
-
-
 /*class boxes */
 
-#heading-classes{
-	padding-top: 40px;
+#heading-classes {
+    padding-top: 40px;
 }
-
 /*information about the modules*/
-.module-info{
+
+.module-info {
     float: left;
     width: 190px;
     height: inherit;
-	margin-top: 40px;
+    margin-top: 40px;
     padding: 10px;
-	background: #fff;
-	text-align: left;
-	margin-bottom: 50px;
-	opacity: 0;
-	transform: translateX(-100px); /*animation*/
-	transition: all 0.3s ease-in-out;
-	border: 1px white;
-	border-style: solid;
-	pointer-events: all;
+    background: #fff;
+    text-align: left;
+    margin-bottom: 50px;
+    opacity: 0;
+    transform: translateX(-100px);
+    /*animation*/
+    
+    transition: all 0.3s ease-in-out;
+    border: 1px white;
+    border-style: solid;
+    pointer-events: all;
     visibility: visible;
 }
-
-#canvas{
+#canvas {
     visibility: hidden;
     opacity: 0;
-    transform: translateX(-100px); /*animation*/
+    transform: translateX(-100px);
+    /*animation*/
+    
     transition: all 0.3s ease-in-out;
     z-index: 3;
-    left:45%;
+    left: 45%;
     margin-top: 10%;
-    position:absolute;
+    position: absolute;
     display: block;
-    pointer-events:none;
+    pointer-events: none;
 }
-
 #canvas.animate {
     visibility: visible;
     opacity: 1;
     transition: all 0.3s ease-in-out;
     transform: translateX(0px);
 }
-
-.module-info:hover{
-	border: 1px rebeccapurple;
-	border-style: solid;
-	border-radius: 0.5%;
+.module-info:hover {
+    border: 1px rebeccapurple;
+    border-style: solid;
+    border-radius: 0.5%;
 }
-
 .module-info > h3 {
-	font-size: 1em;
-	font-weight: bold;
-	text-transform: uppercase;
-	margin: 0;
-	pointer-events:none;
+    font-size: 1em;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin: 0;
+    pointer-events: none;
 }
-
-.module-info > h5{
-	font-size: 1em;
-	pointer-events:none;
+.module-info > h5 {
+    font-size: 1em;
+    pointer-events: none;
 }
-
-.module-info > p{
-	font-weight: bold;
-	pointer-events:none;
+.module-info > p {
+    font-weight: bold;
+    pointer-events: none;
 }
-
 .module-info > img {
-	width: 100%;
-	pointer-events: none;
+    width: 100%;
+    pointer-events: none;
 }
-
-.module-info.animate{
+.module-info.animate {
     visibility: visible;
     opacity: 1;
     transition: all 0.3s ease-in-out;
     transform: translateX(0px);
 }
-
-#temp-0{
+#temp-0 {
     position: relative;
     left: 8%;
     z-index: 2;
 }
-
-#temp-1{
+#temp-1 {
     left: 38%;
     position: relative;
     z-index: 1;
 }
-
-#temp-2{
+#temp-2 {
     position: relative;
     left: 68%;
     z-index: 1;
 }
-
-#datepicker{
-	z-index: 1;
-}
-
-.floormap{
+.floormap {
     z-index: 0;
     left: 55%;
-    display:block;
-    visibility:visible;
-    position:relative;
+    display: block;
+    visibility: visible;
+    position: relative;
 }
-
-
 /*RESPONSIVE SECTION*/
 
 @media screen and (max-width: 650px) {
-	#module-text{
-		width: 180px;
-	}
-
-	.search {
-		margin-left: -170px;
-	}
-
-	.search-container{
-		padding: 2px;
-		padding-top: 30px;
-		height: 80px;
-	}
-
-	#datepicker{
-		width: 80px;
-	}
-
-	#title{
-		font-size: 3em;
-	}
-
-	#search-btn{
-		width: 80px;
-		padding: 0;
-	}
-
-	#title{
-		font-size: 3em;
-	}
-
-
+    .search {
+        width: 95%;
+    }
+    #title {
+        font-size: 2.5em;
+    }
 }

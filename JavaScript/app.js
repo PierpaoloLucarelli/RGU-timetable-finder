@@ -1,9 +1,9 @@
 $(document).ready(function(){
-	var selectedDayInBox;
     var cols = [];
 
-	var getClasses = function(){
-		$("#heading-classes").text("Your classes for " + (selectedDayInBox === "Today" ? selectedDayInBox : "the " + selectedDayInBox));
+    //gets called when search is pressed and displays generated date
+    var getClasses = function(){
+      $("#heading-classes").text("Your classes for " + (selectedDayInBox === "Today" ? selectedDayInBox : "the " + selectedDayInBox));
 
 			//animate the classes divs
 			$(".module-info").each(function(i){
@@ -14,42 +14,42 @@ $(document).ready(function(){
 			});
 		}
 
-		$("#datepicker").datepicker({
-			inline: true,
-			showOtherMonths: true,
-			dayNamesMin: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
-		});
-		selectedDayInBox = $("#datepicker").val();
+        //sets up the datepicker
+        $("#datepicker").datepicker({
+         inline: true,
+         showOtherMonths: true,
+         dayNamesMin: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
+     });
+        var selectedDayInBox = $("#datepicker").val();
 
-		// stores the selected date;
+		// hides the displayed modules and stores the selected date;
 		$("#datepicker").on("change",function(){
 			$(".module-info").each(function(){
 				$(this).removeClass("animate");
 			});
-            $(document.getElementById("canvas")).removeClass("animate");
-            $(document.getElementById("canvas")).css("visibility", "hidden");
-            $(document.getElementById("canvas")).css("display", "none");
-			selectedDayInBox = $(this).val();
-		});
 
-		//change color/style of div when mouse is over class/module
+            //hides the canvas when new date is selected
+            $("#canvas").removeClass("animate").css("visibility", "hidden").css("display", "none");
+            selectedDayInBox = $(this).val();
+        });
+
+		//changes border/cursor of div when mouse is over class/module
 		$(".row").on("mouseover", ".module-info", function(){
-  			//use addClass to change div color/cursor when hovered over
-  			$(this).css("cursor", "pointer");
-  		});
+           $(this).css("cursor", "pointer");
+       });
 
+        //removes modules which are not selected
 		$(".row").on("click", ".module-info", function(event){
 			var modules = [];
 			modules = $('.module-info').each( function () {}).toArray();
 			modules.forEach(function(element){
-				if ( element.getAttribute("id") != event.target.id ) {
+				if ( $(element).attr('id') != event.target.id ) {
                     setTimeout(function(){
                         $(element).css("visibility", "hidden");
                     }, 900);
-					$(element).removeClass("animate");
-					$(element).removeAttr("id");
-				}
-			})
+                    $(element).removeClass("animate").removeAttr("id");
+                }
+            })
 
             if ( event.target.id == "temp-2"){
                 setTimeout(function(){
@@ -74,16 +74,21 @@ $(document).ready(function(){
                 init();
             }, 900);
 
-  		});
+        });
 
+        //shows the results with generated data
 		$("#search-btn").click(function(){
-			// show the bottom container
-			$(".bottom-container").css("display", "block");
+            //the first two lines move the search container from the middle of the page to the bottom of the page
+            $(".search-container").css("margin-top", "0");
+            $(".search-container").css("bottom", "0");
+            $(".bottom-container").css("display", "block");
 			$(".bottom-container").css("height", "600px");
+            $(".footer").css("display", "block");
 
-			$('html, body').animate({
-				scrollTop: 400
-			},800);
+            $('html, body').animate({
+                scrollTop: $(".search-container").offset().top - $("nav").height()
+            },800);  
+			
 
 			// -------------------------------------------
 			// make the call to google calnedar here
@@ -94,7 +99,7 @@ $(document).ready(function(){
 			// display th edate on screen
 
 			/*
-			Search function currently working only with "cs" in search box and works with hard-coded sample data
+			Search function currently working only shows cs data works with hard-coded sample data
 			in timetables.js for testing purposes. After testing is approved we will proceed with Google API.
 			*/
 			var weekDays = ["sunday","monday","tuesday","wednesday","thursday","friday","saturday"];
@@ -103,9 +108,11 @@ $(document).ready(function(){
 			var searchedCourse = "cs";
 			// var searchedCourse = $("#module-text").val();
 			$(".row").empty();
-			if (selectedDayOfWeek == "saturday" || selectedDayOfWeek == "sunday") {
-				$(".row").append("No classes during weekend.");
+			if (typeof timetables[searchedCourse][selectedDayOfWeek] == "undefined") {
+				$(".row").append("No classes during selected date.");
 			} else {
+
+                //builds a div by pulling data from timetables.js and displays it
 				for (var i = 0; i < timetables[searchedCourse][selectedDayOfWeek].length; i++) {
 					var moduleToDisplay = timetables[searchedCourse][selectedDayOfWeek][i];
 					var buildingPicture = moduleToDisplay.room.substring(0,1)+".jpg";
@@ -127,23 +134,23 @@ $(document).ready(function(){
 
             $(".row").append('<canvas id="canvas" width="400" height="250"></canvas>');
 
-			getClasses();
-		});
+            getClasses();
+        });
 
 
 
 
 
 
-    function init() {
+        function init() {
 
-        var canvas = document.getElementById("canvas");
-        var ctx = canvas.getContext("2d");
+            var canvas = document.getElementById("canvas");
+            var ctx = canvas.getContext("2d");
 
-        draw(ctx);
-    }
+            draw(ctx);
+        }
 
-    function draw(ctx) {
+        function draw(ctx) {
 
         // layer1/Path
         ctx.save();
@@ -703,4 +710,4 @@ $(document).ready(function(){
         ctx.stroke();
         ctx.restore();
     }
-	});
+});
