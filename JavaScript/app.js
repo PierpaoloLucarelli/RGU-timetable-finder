@@ -1,9 +1,13 @@
 $(document).ready(function () {
+
+    //The cols variable will contain each html section containing the class/module information
     var cols = [];
 
     //gets called when search is pressed and displays generated date
     var getClasses = function () {
-        $("#heading-classes").text("Your classes for " + (selectedDayInBox === "Today" ? selectedDayInBox : "the " + selectedDayInBox));
+
+        //Changes the title depending on the date selected
+        $("#heading-classes").text("Your classes for " + (selectedDateInBox === "Today" ? selectedDateInBox : "the " + selectedDateInBox));
 
         //animate the classes divs
         $(".module-info").each(function (i) {
@@ -14,15 +18,15 @@ $(document).ready(function () {
         });
     }
 
-    //sets up the datepicker
+    //sets up the datepicker from the jQuery UI
     $("#datepicker").datepicker({
         inline: true,
         showOtherMonths: true,
         dayNamesMin: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
     });
-    var selectedDayInBox = $("#datepicker").val();
+    var selectedDateInBox = $("#datepicker").val();
 
-    // hides the displayed modules and stores the selected date;
+    // hides the displayed modules when the date is changed and stores the selected date;
     $("#datepicker").on("change", function () {
         $(".module-info").each(function () {
             $(this).removeClass("animate");
@@ -30,7 +34,7 @@ $(document).ready(function () {
 
         //hides the canvas when new date is selected
         $("#canvas").removeClass("animate").css("visibility", "hidden").css("display", "none");
-        selectedDayInBox = $(this).val();
+        selectedDateInBox = $(this).val();
     });
 
     //changes border/cursor of div when mouse is over class/module
@@ -38,11 +42,15 @@ $(document).ready(function () {
         $(this).css("cursor", "pointer");
     });
 
-    //removes modules which are not selected
+    //removes modules which are not selected/clicked on
     $(".row").on("click", ".module-info", function (event) {
+
+        //Contains the modules/classes
         var modules = [];
         modules = $('.module-info').each(function () {
         }).toArray();
+
+        //when a class is clicked it's moved to the left and the others get hidden, all animated
         modules.forEach(function (element) {
             if ($(element).attr('id') != event.target.id) {
                 setTimeout(function () {
@@ -70,6 +78,7 @@ $(document).ready(function () {
             }, 500);
         }
 
+        //animates the canvas
         setTimeout(function () {
             $(document.getElementById("canvas")).addClass("animate");
             init();
@@ -79,7 +88,8 @@ $(document).ready(function () {
 
     //shows the results with generated data
     $("#search-btn").click(function () {
-        //the first two lines move the search container from the middle of the page to the bottom of the page
+
+        //hides the title and only the search bar remains from the top section
         $(".search-container").css("position", "static");
         $(".top-container").css("height", "auto");
         $(".top-container h1").hide();
@@ -88,60 +98,80 @@ $(document).ready(function () {
         $(".bottom-container").css("height", "auto");
         $(".footer").css("display", "block");
 
-        // $('html, body').animate({
-        //     scrollTop: $(".search-container").offset().top - $("nav").height()
-        // },800);
-
-
-        // -------------------------------------------
-        // make the call to google calnedar here
-        // then based on number of results recieved
-        // add skeleton classes to the module-info
-        // -------------------------------------------
-
-        // display th edate on screen
-
-        /*
-         Search function currently working only shows cs data works with hard-coded sample data
-         in timetables.js for testing purposes. After testing is approved we will proceed with Google API.
-         */
-        var weekDays = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
+        // get the date from jquery
         var selectedDate = $("#datepicker").datepicker("getDate");
-        var selectedDayOfWeek = weekDays[selectedDate.getDay()];
-        var searchedCourse = "cs";
-        // var searchedCourse = $("#module-text").val();
-        $(".row").empty();
-        if (typeof timetables[searchedCourse][selectedDayOfWeek] == "undefined") {
-            $(".row").append("No classes during selected date.");
-        } else {
 
-            //builds a div by pulling data from timetables.js and displays it
-            for (var i = 0; i < timetables[searchedCourse][selectedDayOfWeek].length; i++) {
-                var moduleToDisplay = timetables[searchedCourse][selectedDayOfWeek][i];
-                var buildingPicture = moduleToDisplay.room.substring(0, 1) + ".jpg";
-                $(".row").append('<div class = "three columns">\
-						<div class = "module-info">\
-						<h3>' + moduleToDisplay.module + ' - ' + moduleToDisplay.room + ' - ' + moduleToDisplay.type + '</h3>\
-						<h5>' + moduleToDisplay.description + '</h5>\
-						<p>' + moduleToDisplay.startTime + ' - ' + moduleToDisplay.endTime + '</p>\
-						<img src="img/buildings/' + buildingPicture + '">\
-						</div>\
-						</div>');
+        //The get methods for date objects return dates that are with one day backwards than the actual date,
+        //so the date is set with one day forward to counteract this.
+        selectedDate.setDate(selectedDate.getDate() + 1);
+
+        //converts the selected date object to RFC3339 style date string. Needed to work with Google API.
+        function ISODateString(d) {
+
+            //Adds a zero in front i.e. if April -> 04 and not just 4.
+            function pad(n) {
+                return n < 10 ? '0' + n : n
             }
+
+            return d.getUTCFullYear() + '-'
+                + pad(d.getUTCMonth() + 1) + '-'
+                + pad(d.getUTCDate()) + 'T'
         }
 
-        cols = $('.three, .columns').each(function () {
-        }).toArray();
-        cols.forEach(function (element, i) {
-            $(element).attr("id", "cols-temp-" + i);
-        })
+        //Will contain all the events of a day pulled from Google Calendar.
+        var eventList = [];
 
-        $(".row").append('<canvas id="canvas" width="400" height="250"></canvas>');
+        //Min and max time are strings and their contents are passed as parameters to the Google API.
+        //Used to get events only from one day
+        //They are further constructed to suit RFC3339 and the date is set back so that ===
+        var minDate = ISODateString(selectedDate) + "00%3A00%3A00.000Z";
+        var maxDate = ISODateString(selectedDate) + "23%3A59%3A59.000Z";
 
-        getClasses();
-    });
+        //GET request for class info
+        //Queries the Google database for calendar info and pulls the JSON
+        $.get("https://www.googleapis.com/calendar/v3/calendars/r0ohvapigmljl4lvrktfppd530%40" +
+            "group.calendar.google.com/events?showDeleted=false&timeMax=" + maxDate + "&timeMin=" + minDate +
+            "&key=AIzaSyDsE7ox3w25QTkOB7bIQh5N4scbUnw_wZc", function (events) {
 
+            //items = events in selected day
+            eventList = events.items;
+        }).success(function () { //this gets called when GET request is complete
 
+            //Removes currently displayed modules
+            $(".row").empty();
+            if (eventList.length == 0) {
+                $(".row").append("No classes during selected date.");
+            } else {
+
+                //builds a div by using the data pulled from the api/json and displays it
+                for (var i = 0; i < eventList.length; i++) {
+                    var moduleToDisplay = eventList[i];
+                    var buildingPicture = moduleToDisplay.location.substring(0, 1) + ".jpg";
+                    $(".row").append('<div class = "three columns">\
+                        <div class = "module-info">\
+                        <h3>' + moduleToDisplay.summary + ' - ' + moduleToDisplay.location + '</h3>\
+                        <h5>' + moduleToDisplay.description + '</h5>\
+                        <p>' + moduleToDisplay.start.dateTime.substring(11, 16) + ' - ' + moduleToDisplay.end.dateTime.substring(11, 16) + '</p>\
+                        <img src="img/buildings/' + buildingPicture + '">\
+                        </div>\
+                        </div>');
+                }
+            }
+
+            //used for canvas construction
+            cols = $('.three, .columns').each(function () {
+            }).toArray();
+            cols.forEach(function (element, i) {
+                $(element).attr("id", "cols-temp-" + i);
+            })
+
+            $(".row").append('<canvas id="canvas" width="400" height="250"></canvas>');
+
+            getClasses();
+        });
+    })
+
+    //displays the canvas. Data/lines are generated from and Illustrator plugin.
     function init() {
 
         var canvas = document.getElementById("canvas");
