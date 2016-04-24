@@ -1,5 +1,4 @@
 $(document).ready(function () {
-    // console.log(cal_ids["computer science"]);
     //The cols variable will contain each html section containing the class/module information
     var cols = [];
     var availableTags = Object.keys(cal_ids);
@@ -19,7 +18,7 @@ $(document).ready(function () {
         });
     }
 
-
+    // Jquery autocomplete
     $( "#module-text" ).autocomplete({
      source: availableTags
    });
@@ -140,14 +139,12 @@ $(document).ready(function () {
         //They are further constructed to suit RFC3339 and the date is set back so that ===
         var minDate = ISODateString(selectedDate) + "00%3A00%3A00.000Z";
         var maxDate = ISODateString(selectedDate) + "23%3A59%3A59.000Z";
-        console.log(maxDate + " " + minDate);
         //GET request for class info
         //Queries the Google database for calendar info and pulls the JSON
         $.get("https://www.googleapis.com/calendar/v3/calendars/" + calendar_id +
          "/events?timeMax=" + maxDate + "&timeMin=" + minDate +
             "&key=AIzaSyDsE7ox3w25QTkOB7bIQh5N4scbUnw_wZc", function (events) {
             eventList = events.items;
-            console.log(events.items);
         }).success(function () { //this gets called when GET request is complete
 
             //Removes currently displayed modules
@@ -155,10 +152,8 @@ $(document).ready(function () {
             if (eventList.length == 0) {
                 $(".row").append("No classes during selected date.");
             } else {
-
                 //builds a div by using the data pulled from the api/json and displays it
                 for (var i = 0; i < eventList.length; i++) {
-                    console.log(eventList);
                     var moduleToDisplay = eventList[i];
                     var buildingPicture = moduleToDisplay.location.substring(0, 1) + ".jpg";
                     $(".row").append('<div class = "three columns">\
