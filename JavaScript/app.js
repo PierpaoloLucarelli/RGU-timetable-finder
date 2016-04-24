@@ -100,6 +100,7 @@ $(document).ready(function () {
             return;
         }
         $("#module-text").removeClass("error");
+        $("nav").css("background", "none");
         //hides the title and only the search bar remains from the top section
         $(".search-container").css("position", "static");
         $(".top-container").css("height", "auto");
