@@ -18,7 +18,7 @@
 /*container for the bottom section*/
 
 .bottom-container {
-    background: #ecf0f1;
+    background: white;
     display: none;
 }
 
@@ -139,6 +139,8 @@ nav {
 /*information about the modules*/
 
 .module-info {
+    border: 1px solid #c0c0c0;
+    border-style: solid;
     float: left;
     width: 190px;
     height: inherit;
@@ -152,8 +154,6 @@ nav {
     /*animation*/
 
     transition: all 0.3s ease-in-out;
-    border: 1px white;
-    border-style: solid;
     pointer-events: all;
     visibility: visible;
 }

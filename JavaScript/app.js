@@ -19,9 +19,9 @@ $(document).ready(function () {
     }
 
     // Jquery autocomplete
-    $( "#module-text" ).autocomplete({
-     source: availableTags
-   });
+    $("#module-text").autocomplete({
+        source: availableTags
+    });
 
     //sets up the datepicker from the jQuery UI
     $("#datepicker").datepicker({
@@ -42,7 +42,7 @@ $(document).ready(function () {
         selectedDateInBox = $(this).val();
     });
 
-    //changes border/cursor of div when mouse is over class/module
+    //changes cursor of div when mouse is over class/module
     $(".row").on("mouseover", ".module-info", function () {
         $(this).css("cursor", "pointer");
     });
@@ -88,13 +88,17 @@ $(document).ready(function () {
             $(document.getElementById("canvas")).addClass("animate");
             init();
         }, 900);
+    });
 
+    //empties the search bar when clicked
+    $("#module-text").click(function () {
+        $("#module-text").val("");
     });
 
     //shows the results with generated data
     $("#search-btn").click(function () {
 
-        if( ! $("#module-text").val() ){
+        if (!$("#module-text").val()) {
             $("#module-text").addClass("error");
             return;
         }
@@ -104,7 +108,7 @@ $(document).ready(function () {
         $(".search-container").css("position", "static");
         $(".top-container").css("height", "auto");
         $(".top-container h1").hide();
-        $(".search-container").css("margin", "70px 0px 0px 0px");
+        $(".search-container").css("margin", "0px 0px 0px 0px");
         $(".bottom-container").css("display", "block");
         $(".bottom-container").css("height", "auto");
         $(".footer").css("display", "block");
@@ -120,12 +124,20 @@ $(document).ready(function () {
         var course = $("#module-text").val();
         var calendar_id = cal_ids[course]; // gets the calendar id from timetables.js
 
+        //returns error message if typed in module doesn't exist
+        if (typeof calendar_id == 'undefined') {
+            $("#heading-classes").text("Please select existing module.");
+            return;
+        }
 
         //converts the selected date object to RFC3339 style date string. Needed to work with Google API.
         function ISODateString(d) {
+
+            //ads a 0 in front i.e. if April -> 04 and not just 4.
             function pad(n) {
                 return n < 10 ? '0' + n : n
             }
+
             return d.getUTCFullYear() + '-'
                 + pad(d.getUTCMonth() + 1) + '-'
                 + pad(d.getUTCDate()) + 'T'
@@ -136,13 +148,14 @@ $(document).ready(function () {
 
         //Min and max time are strings and their contents are passed as parameters to the Google API.
         //Used to get events only from one day
-        //They are further constructed to suit RFC3339 and the date is set back so that ===
+        //They are further constructed to suit RFC3339
         var minDate = ISODateString(selectedDate) + "00%3A00%3A00.000Z";
         var maxDate = ISODateString(selectedDate) + "23%3A59%3A59.000Z";
+
         //GET request for class info
         //Queries the Google database for calendar info and pulls the JSON
         $.get("https://www.googleapis.com/calendar/v3/calendars/" + calendar_id +
-         "/events?timeMax=" + maxDate + "&timeMin=" + minDate +
+            "/events?timeMax=" + maxDate + "&timeMin=" + minDate +
             "&key=AIzaSyDsE7ox3w25QTkOB7bIQh5N4scbUnw_wZc", function (events) {
             eventList = events.items;
         }).success(function () { //this gets called when GET request is complete
