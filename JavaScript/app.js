@@ -95,6 +95,11 @@ $(document).ready(function () {
     //shows the results with generated data
     $("#search-btn").click(function () {
 
+        if( ! $("#module-text").val() ){
+            $("#module-text").addClass("error");
+            return;
+        }
+        $("#module-text").removeClass("error");
         //hides the title and only the search bar remains from the top section
         $(".search-container").css("position", "static");
         $(".top-container").css("height", "auto");

@@ -116,6 +116,11 @@ nav {
     z-index: 2;
 }
 
+.error {
+    border: 2px solid #c0392b !important;
+}
+
+
 /*main header*/
 
 #title {
