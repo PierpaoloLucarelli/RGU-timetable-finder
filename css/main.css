@@ -138,11 +138,10 @@ nav {
 
 /*information about the modules*/
 
+
 .module-info {
     border: 1px solid #c0c0c0;
     border-style: solid;
-    float: left;
-    width: 190px;
     height: inherit;
     margin-top: 40px;
     padding: 10px;
