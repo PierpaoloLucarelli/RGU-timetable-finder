@@ -1,7 +1,13 @@
 $(document).ready(function () {
     //The cols variable will contain each html section containing the class/module information
+    //drawFlag is a boolean variable determining if the canvas has already been drewn so further clicks will not affect the state of canvas.
+    //roomInventory is an array that is being populated with all the rooms for the modules that appear when a search is performed
+    // it is used to determine the drawing of the canvas to be respective to the room.
     var cols = [];
     var availableTags = Object.keys(cal_ids);
+    var roomInventory = [];
+    var drawAvailable = false;
+    var map;
 
     //gets called when search is pressed and displays generated date
     var getClasses = function () {
@@ -9,7 +15,7 @@ $(document).ready(function () {
         //Changes the title depending on the date selected
         $("#heading-classes").text("Your classes for " + (selectedDateInBox === "Today" ? selectedDateInBox : "the " + selectedDateInBox));
 
-        //animate the classes divs
+        //animate the classes divs and add temporary id tags to them
         $(".module-info").each(function (i) {
 
             setTimeout(function () {
@@ -33,6 +39,8 @@ $(document).ready(function () {
 
     // hides the displayed modules when the date is changed and stores the selected date;
     $("#datepicker").on("change", function () {
+        clearTimeout(map);
+        map = null;
         $(".module-info").each(function () {
             $(this).removeClass("animate");
         });
@@ -49,45 +57,80 @@ $(document).ready(function () {
 
     //removes modules which are not selected/clicked on
     $(".row").on("click", ".module-info", function (event) {
+        //if any of the modules infos are clicked check if the draw state is available and then proceed with the function, otherwise perform nothing.
+        if (drawAvailable) {
+            var modules = [];  //Contains the modules/classes
+            modules = $('.module-info').each(function () {
+            }).toArray();
+            //when a class is clicked it's moved to the left and the others get hidden, all animated
+            modules.forEach(function (element) {
+                if ($(element).attr('id') != event.target.id) {
+                    setTimeout(function () {
+                        $(element).css("visibility", "hidden");
+                    }, 900);
+                    $(element).removeClass("animate").removeAttr("id");
+                }
+            });
+            //switch statement to target specifically the div object that is being clicked upon and depending on it's id tag, the event populates the canvas with the respective map
+            //of the room the the module takes place in. Also adds some aesthetics on how canvas is being placed into the website and replaces some css attributes so there is no further
+            //interference or more events created if the user decides to click the same element again.
 
-        //Contains the modules/classes
-        var modules = [];
-        modules = $('.module-info').each(function () {
-        }).toArray();
+            //animations are adjusted for responsiveness across devices
 
-        //when a class is clicked it's moved to the left and the others get hidden, all animated
-        modules.forEach(function (element) {
-            if ($(element).attr('id') != event.target.id) {
-                setTimeout(function () {
-                    $(element).css("visibility", "hidden");
-                }, 900);
-                $(element).removeClass("animate").removeAttr("id");
+            switch (event.target.id) {
+                case "temp-2" :
+                    $(event.currentTarget).css("pointer-events", "none");
+                    $(event.currentTarget).css("cursor", "normal");
+                    map = setTimeout(function () {
+                        ($(event.currentTarget).css("z-index", "1"));
+                        if ($(window).width() > 361) {
+                            ($(event.currentTarget).css("transform", "translateX(-280%)"));
+                        } else {
+                            ($(event.currentTarget).css("transform", "translateY(-350%)"));
+                        }
+                        ($(event.currentTarget).css("transition", "all 0.3s ease-in-out"));
+                        $(document.getElementById("canvas")).addClass("animate");
+                        $(event.currentTarget).css("border", "1px rebeccapurple")
+                        $(event.currentTarget).css("border-style", "solid");
+                        draw("N303");
+                        drawAvailable = false;
+                    }, 400);
+                    break;
+                case "temp-1" :
+                    $(event.currentTarget).css("pointer-events", "none");
+                    $(event.currentTarget).css("cursor", "normal");
+                    map = setTimeout(function () {
+                        ($(event.currentTarget).css("z-index", "1"));
+                        if ($(window).width() > 361){
+                            ($(event.currentTarget).css("transform", "translateX(-140%)"));
+                        } else {
+                            ($(event.currentTarget).css("transform", "translateY(-190%)"));
+
+                        }
+                        ($(event.currentTarget).css("transition", "all 0.3s ease-in-out"));
+                        $(document.getElementById("canvas")).addClass("animate");
+                        $(event.currentTarget).css("border", "1px rebeccapurple")
+                        $(event.currentTarget).css("border-style", "solid");
+                        draw("N309");
+                        drawAvailable = false;
+                    }, 300);
+                    break;
+                case "temp-0" :
+                    $(event.currentTarget).css("cursor", "normal");
+                    $(event.currentTarget).css("pointer-events", "none");
+                    map = setTimeout(function () {
+                        ($(event.currentTarget).css("z-index", "1"));
+                        $(document.getElementById("canvas")).addClass("animate");
+                        $(event.currentTarget).css("border", "1px rebeccapurple")
+                        $(event.currentTarget).css("border-style", "solid");
+                        draw("N340");
+                        drawAvailable = false;
+                    }, 250);
+                    break;
             }
-        })
-
-        if (event.target.id == "temp-2") {
-            setTimeout(function () {
-                ($(event.currentTarget).css("z-index", "1"));
-                ($(event.currentTarget).css("transform", "translateX(-270%)"));
-                ($(event.currentTarget).css("transition", "all 0.3s ease-in-out"));
-            }, 500);
-        } else if (event.target.id == "temp-1") {
-            setTimeout(function () {
-                ($(event.currentTarget).css("z-index", "1"));
-                ($(event.currentTarget).css("transform", "translateX(-140%)"));
-                ($(event.currentTarget).css("transition", "all 0.3s ease-in-out"));
-            }, 500);
-        } else {
-            setTimeout(function () {
-                ($(event.currentTarget).css("z-index", "1"));
-            }, 500);
         }
 
-        //animates the canvas
-        setTimeout(function () {
-            $(document.getElementById("canvas")).addClass("animate");
-            init();
-        }, 900);
+
     });
 
     //empties the search bar when clicked
@@ -95,9 +138,15 @@ $(document).ready(function () {
         $("#module-text").val("");
     });
 
+
+    //if there is an ongoing animation for the canvas and the user starts another search. Clear the function of canvas being drawn/displayed.
+    //declares that the canvas can now be drawn.
+    //clear the inventory array.
     //shows the results with generated data
     $("#search-btn").click(function () {
-
+        drawAvailable = true;
+        roomInventory.length = 0;
+        clearTimeout(map);
         if (!$("#module-text").val()) {
             $("#module-text").addClass("error");
             return;
@@ -165,11 +214,12 @@ $(document).ready(function () {
             if (eventList.length == 0) {
                 $(".row").append("No classes during selected date.");
             } else {
-                //builds a div by using the data pulled from the api/json and displays it
-                for (var i = 0; i < eventList.length; i++) {
-                    var moduleToDisplay = eventList[i];
-                    var buildingPicture = moduleToDisplay.location.substring(0, 1) + ".jpg";
-                    $(".row").append('<div class = "three columns">\
+                if ($(window).width() > 361) {
+                    //builds a div by using the data pulled from the api/json and displays it
+                    for (var i = 0; i < eventList.length; i++) {
+                        var moduleToDisplay = eventList[i];
+                        var buildingPicture = moduleToDisplay.location.substring(0, 1) + ".jpg";
+                        $(".row").append('<div class = "three columns">\
                         <div class = "module-info">\
                         <h3>' + moduleToDisplay.summary + ' - ' + moduleToDisplay.location + '</h3>\
                         <h5>' + moduleToDisplay.description + '</h5>\
@@ -177,19 +227,39 @@ $(document).ready(function () {
                         <img src="img/buildings/' + buildingPicture + '">\
                         </div>\
                         </div>');
+
+                        roomInventory.push(moduleToDisplay.room); //add the rooms for each module to the inventory array
+                    }
+
+                    $(".row").append('<canvas id="canvas" width="400" height="250"></canvas>');
+                } else {
+                    for (var i = 0; i < eventList.length; i++) {
+                        var moduleToDisplay = eventList[i];
+                        var buildingPicture = moduleToDisplay.location.substring(0, 1) + ".jpg";
+                        $(".row").append('<div class = "three columns">\
+                        <div class = "module-info">\
+                        <h3>' + moduleToDisplay.summary + ' - ' + moduleToDisplay.location + '</h3>\
+                        <h5>' + moduleToDisplay.description + '</h5>\
+                        <p>' + moduleToDisplay.start.dateTime.substring(11, 16) + ' - ' + moduleToDisplay.end.dateTime.substring(11, 16) + '</p>\
+                        </div>\
+                        </div>');
+
+                        roomInventory.push(moduleToDisplay.room); //add the rooms for each module to the inventory array
+                    }
+
+                    $(".row").append('<canvas id="canvas" width="400" height="250"></canvas>');
                 }
             }
 
             //used for canvas construction
+            //assigns unique temporary id tags to the div elements of .three-columns and saves them to an array for easy access
             cols = $('.three, .columns').each(function () {
             }).toArray();
             cols.forEach(function (element, i) {
                 $(element).attr("id", "cols-temp-" + i);
             })
 
-            $(".row").append('<canvas id="canvas" width="400" height="250"></canvas>');
-
             getClasses();
         });
-    })
+    });
 });
