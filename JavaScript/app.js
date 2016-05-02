@@ -160,7 +160,7 @@ $(document).ready(function () {
         $(".search-container").css("margin", "0px 0px 0px 0px");
         $(".bottom-container").css("display", "block");
         $(".bottom-container").css("height", "auto");
-        $(".footer").css("display", "block");
+        $(document.footer).css("position", "relative");
 
         // get the date from jquery
         var selectedDate = $("#datepicker").datepicker("getDate");

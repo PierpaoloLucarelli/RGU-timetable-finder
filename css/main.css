@@ -355,7 +355,9 @@ footer a {
         transform: translateY(-0px);
     }
 
-
+    footer{
+      position: relative;
+    }
     .search-container {
         position: absolute;
         width: 100%;
