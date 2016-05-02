@@ -5,6 +5,7 @@ $(document).ready(function () {
     // it is used to determine the drawing of the canvas to be respective to the room.
     var cols = [];
     var availableTags = Object.keys(cal_ids);
+    var moduleIDs = [];
     var roomInventory = [];
     var drawAvailable = false;
     var map;
@@ -14,12 +15,14 @@ $(document).ready(function () {
 
         //Changes the title depending on the date selected
         $("#heading-classes").text("Your classes for " + (selectedDateInBox === "Today" ? selectedDateInBox : "the " + selectedDateInBox));
+        modules = $('.module-info').each(function () {
+        }).toArray();
 
         //animate the classes divs and add temporary id tags to them
         $(".module-info").each(function (i) {
-
+            $(".module-info").eq(i).attr("id", "temp-" + i).attr("tabindex", (2 + i));
             setTimeout(function () {
-                $(".module-info").eq(i).addClass("animate").attr("id", "temp-" + i);
+                $(".module-info").eq(i).addClass("animate");
             }, 150 * (i + 1));
         });
     }
@@ -62,6 +65,7 @@ $(document).ready(function () {
             var modules = [];  //Contains the modules/classes
             modules = $('.module-info').each(function () {
             }).toArray();
+
             //when a class is clicked it's moved to the left and the others get hidden, all animated
             modules.forEach(function (element) {
                 if ($(element).attr('id') != event.target.id) {
@@ -78,15 +82,58 @@ $(document).ready(function () {
             //animations are adjusted for responsiveness across devices
 
             switch (event.target.id) {
+                case "temp-4" :
+                    $(event.currentTarget).css("pointer-events", "none");
+                    $(event.currentTarget).css("cursor", "normal");
+                    map = setTimeout(function () {
+                        ($(event.currentTarget).css("z-index", "5"));
+                        if ($(window).width() > 400) {
+                            ($(event.currentTarget).css("transform", "translateX(-350%)"));
+                        } else {
+                            $('html, body').animate({
+                                scrollTop: $("#module-text").offset().top
+                            }, 1);
+                            ($(event.currentTarget).css("transform", "translateY(-350%)"));
+                        }
+                        ($(event.currentTarget).css("transition", "all 0.3s ease-in-out"));
+                        $(document.getElementById("canvas")).addClass("animate");
+                        $(event.currentTarget).css("border", "1px rebeccapurple")
+                        $(event.currentTarget).css("border-style", "solid");
+                        draw("N303");
+                        drawAvailable = false;
+                    }, 600);
+                case "temp-3" :
+                    $(event.currentTarget).css("pointer-events", "none");
+                    $(event.currentTarget).css("cursor", "normal");
+                    map = setTimeout(function () {
+                        ($(event.currentTarget).css("z-index", "4"));
+                        if ($(window).width() > 400) {
+                            ($(event.currentTarget).css("transform", "translateX(-350%)"));
+                        } else {
+                            $('html, body').animate({
+                                scrollTop: $("#module-text").offset().top
+                            }, 1);
+                            ($(event.currentTarget).css("transform", "translateY(-450%)"));
+                        }
+                        ($(event.currentTarget).css("transition", "all 0.3s ease-in-out"));
+                        $(document.getElementById("canvas")).addClass("animate");
+                        $(event.currentTarget).css("border", "1px rebeccapurple")
+                        $(event.currentTarget).css("border-style", "solid");
+                        draw("N303");
+                        drawAvailable = false;
+                    }, 500);
                 case "temp-2" :
                     $(event.currentTarget).css("pointer-events", "none");
                     $(event.currentTarget).css("cursor", "normal");
                     map = setTimeout(function () {
-                        ($(event.currentTarget).css("z-index", "1"));
-                        if ($(window).width() > 361) {
+                        ($(event.currentTarget).css("z-index", "3"));
+                        if ($(window).width() > 400 ) {
                             ($(event.currentTarget).css("transform", "translateX(-280%)"));
                         } else {
-                            ($(event.currentTarget).css("transform", "translateY(-350%)"));
+                            $('html, body').animate({
+                                scrollTop: $("#module-text").offset().top
+                            }, 1);
+                            ($(event.currentTarget).css("transform", "translateY(-300%)"));
                         }
                         ($(event.currentTarget).css("transition", "all 0.3s ease-in-out"));
                         $(document.getElementById("canvas")).addClass("animate");
@@ -100,10 +147,13 @@ $(document).ready(function () {
                     $(event.currentTarget).css("pointer-events", "none");
                     $(event.currentTarget).css("cursor", "normal");
                     map = setTimeout(function () {
-                        ($(event.currentTarget).css("z-index", "1"));
-                        if ($(window).width() > 361){
+                        ($(event.currentTarget).css("z-index", "2"));
+                        if ($(window).width() > 400) {
                             ($(event.currentTarget).css("transform", "translateX(-140%)"));
                         } else {
+                            $('html, body').animate({
+                                scrollTop: $("#module-text").offset().top
+                            }, 1);
                             ($(event.currentTarget).css("transform", "translateY(-190%)"));
 
                         }
@@ -128,6 +178,8 @@ $(document).ready(function () {
                     }, 250);
                     break;
             }
+
+
         }
 
 
@@ -138,88 +190,100 @@ $(document).ready(function () {
         $("#module-text").val("");
     });
 
+    //Search is fired when enter is pressed.
+    $("#module-text").keypress(function (event){
+       if ( event.which == 13 ){
+            $(document.getElementById("search-btn")).click();
+       }
+    });
 
     //if there is an ongoing animation for the canvas and the user starts another search. Clear the function of canvas being drawn/displayed.
     //declares that the canvas can now be drawn.
     //clear the inventory array.
     //shows the results with generated data
+
+
+
+
     $("#search-btn").click(function () {
-        drawAvailable = true;
-        roomInventory.length = 0;
-        clearTimeout(map);
-        if (!$("#module-text").val()) {
-            $("#module-text").addClass("error");
-            return;
-        }
-        $("#module-text").removeClass("error");
-        $("nav").css("background", "none");
-        //hides the title and only the search bar remains from the top section
-        $(".search-container").css("position", "static");
-        $(".top-container").css("height", "auto");
-        $(".top-container h1").hide();
-        $(".search-container").css("margin", "0px 0px 0px 0px");
-        $(".bottom-container").css("display", "block");
-        $(".bottom-container").css("height", "auto");
-        $(".footer").css("display", "block");
-
-        // get the date from jquery
-        var selectedDate = $("#datepicker").datepicker("getDate");
-
-        //The get methods for date objects return dates that are with one day backwards than the actual date,
-        //so the date is set with one day forward to counteract this.
-        selectedDate.setDate(selectedDate.getDate() + 1);
-
-        // get the text from the ser bar
-        var course = $("#module-text").val();
-        var calendar_id = cal_ids[course]; // gets the calendar id from timetables.js
-
-        //returns error message if typed in module doesn't exist
-        if (typeof calendar_id == 'undefined') {
-            $("#heading-classes").text("Please select existing module.");
-            return;
-        }
-
-        //converts the selected date object to RFC3339 style date string. Needed to work with Google API.
-        function ISODateString(d) {
-
-            //ads a 0 in front i.e. if April -> 04 and not just 4.
-            function pad(n) {
-                return n < 10 ? '0' + n : n
+            drawAvailable = true;
+            roomInventory.length = 0;
+            moduleIDs.length = 0;
+            clearTimeout(map);
+            if (!$("#module-text").val()) {
+                $("#module-text").addClass("error");
+                return;
             }
 
-            return d.getUTCFullYear() + '-'
-                + pad(d.getUTCMonth() + 1) + '-'
-                + pad(d.getUTCDate()) + 'T'
-        }
+            $("#module-text").removeClass("error");
+            $("nav").css("background", "none");
+            //hides the title and only the search bar remains from the top section
+            $(".search-container").css("position", "static");
+            $(".top-container").css("height", "auto");
+            $(".top-container h1").hide();
+            $(".search-container").css("margin", "0px 0px 0px 0px");
+            $(".bottom-container").css("display", "block");
+            $(".bottom-container").css("height", "auto");
+            $(".footer").css("display", "block");
 
-        //Will contain all the events of a day pulled from Google Calendar.
-        var eventList = [];
+            // get the date from jquery
+            var selectedDate = $("#datepicker").datepicker("getDate");
 
-        //Min and max time are strings and their contents are passed as parameters to the Google API.
-        //Used to get events only from one day
-        //They are further constructed to suit RFC3339
-        var minDate = ISODateString(selectedDate) + "00%3A00%3A00.000Z";
-        var maxDate = ISODateString(selectedDate) + "23%3A59%3A59.000Z";
+            //The get methods for date objects return dates that are with one day backwards than the actual date,
+            //so the date is set with one day forward to counteract this.
+            selectedDate.setDate(selectedDate.getDate() + 1);
 
-        //GET request for class info
-        //Queries the Google database for calendar info and pulls the JSON
-        $.get("https://www.googleapis.com/calendar/v3/calendars/" + calendar_id +
-            "/events?timeMax=" + maxDate + "&timeMin=" + minDate +
-            "&key=AIzaSyDsE7ox3w25QTkOB7bIQh5N4scbUnw_wZc", function (events) {
-            eventList = events.items;
-        }).success(function () { //this gets called when GET request is complete
+            // get the text from the ser bar
+            var course = $("#module-text").val();
+            var calendar_id = cal_ids[course]; // gets the calendar id from timetables.js
 
-            //Removes currently displayed modules
-            $(".row").empty();
-            if (eventList.length == 0) {
-                $(".row").append("No classes during selected date.");
-            } else {
-                if ($(window).width() > 361) {
-                    //builds a div by using the data pulled from the api/json and displays it
-                    for (var i = 0; i < eventList.length; i++) {
-                        var moduleToDisplay = eventList[i];
-                        var buildingPicture = moduleToDisplay.location.substring(0, 1) + ".jpg";
-                        $(".row").append('<div class = "three columns">\
+            //returns error message if typed in module doesn't exist
+            if (typeof calendar_id == 'undefined') {
+                $("#heading-classes").text("Please select existing module.");
+                return;
+            }
+
+            //converts the selected date object to RFC3339 style date string. Needed to work with Google API.
+            function ISODateString(d) {
+
+                //ads a 0 in front i.e. if April -> 04 and not just 4.
+                function pad(n) {
+                    return n < 10 ? '0' + n : n
+                }
+
+                return d.getUTCFullYear() + '-'
+                    + pad(d.getUTCMonth() + 1) + '-'
+                    + pad(d.getUTCDate()) + 'T'
+            }
+
+            //Will contain all the events of a day pulled from Google Calendar.
+            var eventList = [];
+
+            //Min and max time are strings and their contents are passed as parameters to the Google API.
+            //Used to get events only from one day
+            //They are further constructed to suit RFC3339
+            var minDate = ISODateString(selectedDate) + "00%3A00%3A00.000Z";
+            var maxDate = ISODateString(selectedDate) + "23%3A59%3A59.000Z";
+
+            //GET request for class info
+            //Queries the Google database for calendar info and pulls the JSON
+            $.get("https://www.googleapis.com/calendar/v3/calendars/" + calendar_id +
+                "/events?timeMax=" + maxDate + "&timeMin=" + minDate +
+                "&key=AIzaSyDsE7ox3w25QTkOB7bIQh5N4scbUnw_wZc", function (events) {
+                eventList = events.items;
+            }).success(function () { //this gets called when GET request is complete
+
+                //Removes currently displayed modules
+                $(".row").empty();
+                if (eventList.length == 0) {
+                    $(".row").append("No classes during selected date.");
+                } else {
+                    if ($(window).width() > 361) {
+                        //builds a div by using the data pulled from the api/json and displays it
+                        for (var i = 0; i < eventList.length; i++) {
+                            var moduleToDisplay = eventList[i];
+                            var buildingPicture = moduleToDisplay.location.substring(0, 1) + ".jpg";
+                            $(".row").append('<div class = "three columns">\
                         <div class = "module-info">\
                         <h3>' + moduleToDisplay.summary + ' - ' + moduleToDisplay.location + '</h3>\
                         <h5>' + moduleToDisplay.description + '</h5>\
@@ -228,15 +292,15 @@ $(document).ready(function () {
                         </div>\
                         </div>');
 
-                        roomInventory.push(moduleToDisplay.room); //add the rooms for each module to the inventory array
-                    }
+                            roomInventory.push(moduleToDisplay.room); //add the rooms for each module to the inventory array
+                        }
 
-                    $(".row").append('<canvas id="canvas" width="400" height="250"></canvas>');
-                } else {
-                    for (var i = 0; i < eventList.length; i++) {
-                        var moduleToDisplay = eventList[i];
-                        var buildingPicture = moduleToDisplay.location.substring(0, 1) + ".jpg";
-                        $(".row").append('<div class = "three columns">\
+                        $(".row").append('<canvas id="canvas" width="400" height="250"></canvas>');
+                    } else {
+                        for (var i = 0; i < eventList.length; i++) {
+                            var moduleToDisplay = eventList[i];
+                            var buildingPicture = moduleToDisplay.location.substring(0, 1) + ".jpg";
+                            $(".row").append('<div class = "three columns">\
                         <div class = "module-info">\
                         <h3>' + moduleToDisplay.summary + ' - ' + moduleToDisplay.location + '</h3>\
                         <h5>' + moduleToDisplay.description + '</h5>\
@@ -244,22 +308,24 @@ $(document).ready(function () {
                         </div>\
                         </div>');
 
-                        roomInventory.push(moduleToDisplay.room); //add the rooms for each module to the inventory array
+                            roomInventory.push(moduleToDisplay.room); //add the rooms for each module to the inventory array
+                        }
+
+                        $(".row").append('<canvas id="canvas" width="400" height="250"></canvas>');
                     }
-
-                    $(".row").append('<canvas id="canvas" width="400" height="250"></canvas>');
                 }
-            }
 
-            //used for canvas construction
-            //assigns unique temporary id tags to the div elements of .three-columns and saves them to an array for easy access
-            cols = $('.three, .columns').each(function () {
-            }).toArray();
-            cols.forEach(function (element, i) {
-                $(element).attr("id", "cols-temp-" + i);
-            })
+                //used for canvas construction
+                //assigns unique temporary id tags to the div elements of .three-columns and saves them to an array for easy access
+                cols = $('.three, .columns').each(function () {
+                }).toArray();
+                cols.forEach(function (element, i) {
+                    $(element).attr("id", "cols-temp-" + i);
+                })
 
-            getClasses();
+                getClasses();
+            });
         });
-    });
+
+
 });
