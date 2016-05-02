@@ -240,6 +240,54 @@ nav {
     position: relative;
 }
 
+/* footer */
+
+footer {
+  width: 100%;
+  background-color: #383A3F;
+  text-align: center;
+  position: absolute;
+  bottom: 0;
+
+}
+footer a:visited {
+  text-decoration: none;
+}
+footer a:hover{
+  color: #873a71;
+}
+
+footer a {
+  color: #7C7877;
+}
+.social-media-container{
+  padding-top: 30px;
+  color: #E0E3DA;
+}
+
+.social-media-container a {
+  text-decoration: none;
+}
+
+.social-media-container ul{
+  padding-left: 0;
+}
+
+.social-media-container li {
+  list-style: none;
+  display: inline;
+  padding: 30px;
+  margin: 0;
+}
+
+.copyrights-container {
+  color : #7C7877;
+  padding-bottom: 10px;
+  padding-top: 5px;
+}
+
+
+
 /*RESPONSIVE SECTION*/
 
 @media screen and (max-width: 650px) and (orientation: portrait) {
