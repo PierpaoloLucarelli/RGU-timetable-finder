@@ -37,7 +37,7 @@
 /*search bar*/
 
 .search {
-    width: 40%;
+    width: 70%;
     margin: 0 auto;
 }
 
@@ -216,20 +216,22 @@ nav {
 
 #temp-0 {
     position: relative;
-    left: 8%;
-    z-index: 2;
+    z-index: 1;
 }
 
 #temp-1 {
-    left: 38%;
     position: relative;
-    z-index: 1;
+    z-index: 2;
 }
 
 #temp-2 {
     position: relative;
-    left: 68%;
-    z-index: 1;
+    z-index: 3;
+}
+
+#temp-3 {
+    position: relative;
+    z-index: 4
 }
 
 .floormap {
@@ -289,8 +291,57 @@ footer a {
 
 
 /*RESPONSIVE SECTION*/
+@media screen and (max-width: 761px){
+    footer{
+        display: none;
+    }
 
-@media screen and (max-width: 650px) and (orientation: portrait) {
+    .search-container {
+        position: absolute;
+        width: 100%;
+        padding: 15px 0px 15px 0px;
+        background: rgba(0, 0, 0, 0.5);
+        margin-top: 20px;
+        overflow: auto;
+        z-index: 1;
+    }
+
+    #temp-0, #temp-1,
+    #temp-2, #temp-3{
+        float:left;
+        position: relative;
+        left: 15%;
+    }
+
+    .module-info {
+        float: left;
+        width: 190px;
+        height: inherit;
+        margin-top: 40px;
+        padding: 10px;
+        background: #fff;
+        text-align: left;
+        margin-bottom: 50px;
+        opacity: 0;
+        transform: translateX(-100px); /*animation*/
+        transition: all 0.3s ease-in-out;
+        border: 1px white;
+        border-style: solid;
+        pointer-events: none;
+        visibility: visible;
+    }
+
+    .module-info > img {
+        visibility: hidden;
+        display: none;
+        width: 0%;
+        height: 0%;
+    }
+
+
+}
+@media all and (orientation: portrait) {
+
     .search {
         width: 95%;
     }
@@ -300,7 +351,7 @@ footer a {
     }
 
     #temp-0, #temp-1,
-    #temp-2{
+    #temp-2, #temp-3{
         float:left;
         position: relative;
         left: 15%;
@@ -355,9 +406,7 @@ footer a {
         transform: translateY(-0px);
     }
 
-    footer{
-      position: relative;
-    }
+
     .search-container {
         position: absolute;
         width: 100%;
@@ -368,5 +417,9 @@ footer a {
         z-index: 1;
     }
 
+
+    footer {
+        position:relative;
+    }
 
 }
